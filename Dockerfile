@@ -1,18 +1,14 @@
-FROM python:3.8-slim-buster
+# Use the Python3.7.2 image
+FROM python:3.7.2-stretch
 
-RUN apt-get update -y
+# Set the working directory to /app
+WORKDIR /app
 
-# gcc compiler and opencv prerequisites
-RUN apt-get -y install nano git build-essential libglib2.0-0 libsm6 libxext6 libxrender-dev
+# Copy the current directory contents into the container at /app 
+ADD . /app
 
-# Detectron2 prerequisites
-RUN pip install torch==1.9.0+cpu torchvision==0.10.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
-RUN pip install cython
-RUN pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
+# Install the dependencies
+RUN pip install -r requirements.txt
 
-# Detectron2 - CPU copy
-RUN python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/index.html
-
-# Development packages
-RUN pip install flask flask-cors requests opencv-python 
-RUN pip install opencv-python-headless
+# run the command to start uWSGI
+CMD ["uwsgi", "app.ini"]
