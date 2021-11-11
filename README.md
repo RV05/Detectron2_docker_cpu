@@ -1,1 +1,2 @@
-# Detectron2_docker_cpu
+# Detectron2_docker_cpu 
+#Deployment-using-nginx-wgsi
